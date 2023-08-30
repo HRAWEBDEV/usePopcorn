@@ -1,14 +1,5 @@
-import Logo from './Logo';
-import Search from './Search';
-import Results from './Results';
-const Nav = () => {
- return (
-  <nav className='nav-bar'>
-   <Logo />
-   <Search />
-   <Results />
-  </nav>
- );
+const Nav = ({ children }) => {
+ return <nav className='nav-bar'>{children}</nav>;
 };
 
 export default Nav;

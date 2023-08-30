@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import MoviesList from './MoviesList';
 
-const ListBox = () => {
+const ListBox = ({ movies }) => {
  const [isOpen1, setIsOpen1] = useState(true);
 
  return (
@@ -9,7 +9,7 @@ const ListBox = () => {
    <button className='btn-toggle' onClick={() => setIsOpen1((open) => !open)}>
     {isOpen1 ? '–' : '+'}
    </button>
-   {isOpen1 && <MoviesList />}
+   {isOpen1 && <MoviesList movies={movies} />}
   </div>
  );
 };
