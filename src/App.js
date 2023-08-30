@@ -7,6 +7,7 @@ import Results from './components/Results';
 import Box from './components/Box';
 import MoviesList from './components/MoviesList';
 import WatchedMovieList from './components/WatchedMovieList';
+import RatingStar from './components/RatingStar';
 import { moviesData } from './components/MoviesData';
 import './index.css';
 
