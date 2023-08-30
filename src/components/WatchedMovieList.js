@@ -1,4 +1,5 @@
 import WatchedMovie from './WatchedMovie';
+
 const WatchedMovieList = ({ watched }) => {
  return (
   <ul className='list'>
