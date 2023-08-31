@@ -14,6 +14,7 @@ const apiKey = '31c8b5ab';
 const apiUri = 'http://www.omdbapi.com';
 
 export default function App() {
+ const [error, setError] = useState('');
  const [isLoading, setIsLoading] = useState(false);
  const [movies, setMovies] = useState([]);
  const [watched, setWatched] = useState([]);
@@ -23,9 +24,16 @@ export default function App() {
   try {
    setIsLoading(true);
    const result = await fetch(`${apiUri}/?apikey=${apiKey}&s=${search}`);
+   if (!result.ok) {
+    throw new Error('some thing went wrong with fetching movies');
+   }
+   if (result.Response === 'False') {
+    throw new Error('movie not found');
+   }
    const data = await result.json();
    setMovies(data.Search);
   } catch (err) {
+   setError(err.message);
   } finally {
    setIsLoading(false);
   }
@@ -49,7 +57,8 @@ export default function App() {
    <Main>
     <Box>
      {isLoading && <p className='loader'>...loading</p>}
-     {!isLoading && <MoviesList movies={movies} />}
+     {error && <p className='error'>{error}</p>}
+     {!isLoading && !error && <MoviesList movies={movies} />}
     </Box>
     <Box>
      <WatchedMovieList watched={watched} />
