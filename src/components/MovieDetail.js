@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import RatingStar from './RatingStar';
 import { apiUri } from '../api';
 
-const MovieDetail = ({ selectedId, onClose }) => {
+const MovieDetail = ({ selectedId, onClose, onAddWatchedMovie }) => {
  const [isLoading, setIsLoading] = useState(false);
  const [movieDetail, setMovieDetail] = useState({});
  const {
@@ -17,6 +17,20 @@ const MovieDetail = ({ selectedId, onClose }) => {
   Director: director,
   Genre: genre,
  } = movieDetail;
+
+ const handleAdd = () => {
+  const newWatchedMovie = {
+   imdbId: selectedId,
+   title,
+   year,
+   poster,
+   imdbRating: 0,
+   userRating: 0,
+   runtime: Number(runtime.split(' ').at(0)),
+  };
+  onAddWatchedMovie(newWatchedMovie);
+  onClose();
+ };
 
  useEffect(() => {
   const getMovieDetail = async () => {
@@ -54,6 +68,9 @@ const MovieDetail = ({ selectedId, onClose }) => {
      <section>
       <div className='rating'>
        <RatingStar maxRating={10} size={24} color='yellow' />
+       <button className='btn-add' onClick={handleAdd}>
+        add to list
+       </button>
       </div>
       <p>
        <em>{plot}</em>

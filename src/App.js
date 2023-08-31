@@ -27,6 +27,15 @@ export default function App() {
   newId === selectedId ? setSelectedId(null) : setSelectedId(newId);
  };
 
+ const handleAddWatchedMovie = (newWatchedMovie) => {
+  setWatched((prev) => [...prev, newWatchedMovie]);
+ };
+
+ const handleDeleteWatchedMovie = (deleteId) => {
+  console.log(deleteId);
+  setWatched((prev) => prev.filter((item) => item.imdbId !== deleteId));
+ };
+
  useEffect(() => {
   let controller = new AbortController();
   const cleanUp = () => {
@@ -77,11 +86,17 @@ export default function App() {
     </Box>
     <Box>
      <>
-      {!selectedId && <WatchedMovieList watched={watched} />}
+      {!selectedId && (
+       <WatchedMovieList
+        onDelete={handleDeleteWatchedMovie}
+        watched={watched}
+       />
+      )}
       {selectedId && (
        <MovieDetail
         onClose={() => setSelectedId(null)}
         selectedId={selectedId}
+        onAddWatchedMovie={handleAddWatchedMovie}
        />
       )}
      </>
