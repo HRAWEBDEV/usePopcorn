@@ -20,30 +20,40 @@ export default function App() {
  const [watched, setWatched] = useState([]);
  const [query, setQuery] = useState('');
 
- const getMovies = async ({ search = 'inception' } = {}) => {
-  try {
-   setIsLoading(true);
-   const result = await fetch(`${apiUri}/?apikey=${apiKey}&s=${search}`);
-   if (!result.ok) {
-    throw new Error('some thing went wrong with fetching movies');
-   }
-   if (result.Response === 'False') {
-    throw new Error('movie not found');
-   }
-   const data = await result.json();
-   setMovies(data.Search);
-  } catch (err) {
-   setError(err.message);
-  } finally {
-   setIsLoading(false);
-  }
+ const handleChangeQuery = async (newQuery) => {
+  setQuery(newQuery);
  };
 
- const handleChangeQuery = async (newQuery) => {};
-
  useEffect(() => {
-  getMovies();
- }, []);
+  let controller = new AbortController();
+  const cleanUp = () => {
+   controller.abort();
+  };
+  const getMovies = async ({ search = 'interstellar' } = {}) => {
+   try {
+    setError('');
+    setIsLoading(true);
+    const result = await fetch(`${apiUri}/?apikey=${apiKey}&s=${search}`, {
+     signal: controller.signal,
+    });
+    if (!result.ok) {
+     throw new Error('some thing went wrong with fetching movies');
+    }
+    const data = await result.json();
+    if (data.Response === 'False') {
+     throw new Error('movie not found');
+    }
+    setError('');
+    setMovies(data.Search);
+   } catch (err) {
+    setError(err.message);
+   } finally {
+    setIsLoading(false);
+   }
+  };
+  getMovies({ search: query || undefined });
+  return cleanUp;
+ }, [query]);
 
  return (
   <>
