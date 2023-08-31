@@ -3,7 +3,7 @@ const MoviesList = ({ movies }) => {
  return (
   <ul className='list'>
    {movies?.map((movie) => (
-    <Movie key={movie.Title} movie={movie} />
+    <Movie key={movie.imdbID} movie={movie} />
    ))}
   </ul>
  );

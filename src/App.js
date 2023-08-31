@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Nav from './components/Nav';
 import Main from './components/Main';
 import Logo from './components/Logo';
@@ -8,42 +8,36 @@ import Box from './components/Box';
 import MoviesList from './components/MoviesList';
 import WatchedMovieList from './components/WatchedMovieList';
 import RatingStar from './components/RatingStar';
-import { moviesData } from './components/MoviesData';
 import './index.css';
 
-const tempWatchedData = [
- {
-  imdbID: 'tt1375666',
-  Title: 'Inception',
-  Year: '2010',
-  Poster:
-   'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
-  runtime: 148,
-  imdbRating: 8.8,
-  userRating: 10,
- },
- {
-  imdbID: 'tt0088763',
-  Title: 'Back to the Future',
-  Year: '1985',
-  Poster:
-   'https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
-  runtime: 116,
-  imdbRating: 8.5,
-  userRating: 9,
- },
-];
+const apiKey = '31c8b5ab';
+const apiUri = 'http://www.omdbapi.com';
 
 export default function App() {
- const [movies, setMovies] = useState(moviesData);
- const [watched, setWatched] = useState(tempWatchedData);
+ const [movies, setMovies] = useState([]);
+ const [watched, setWatched] = useState([]);
+ const [query, setQuery] = useState('');
+
+ const getMovies = async ({ search = 'inception' } = {}) => {
+  try {
+   const result = await fetch(`${apiUri}/?apikey=${apiKey}&s=${search}`);
+   const data = await result.json();
+   setMovies(data.Search);
+  } catch (err) {}
+ };
+
+ const handleChangeQuery = async (newQuery) => {};
+
+ useEffect(() => {
+  getMovies();
+ }, []);
 
  return (
   <>
    <Nav>
     <>
      <Logo />
-     <Search />
+     <Search value={query} onChange={handleChangeQuery} />
      <Results movies={movies} />
     </>
    </Nav>
