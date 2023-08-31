@@ -7,6 +7,7 @@ import Results from './components/Results';
 import Box from './components/Box';
 import MoviesList from './components/MoviesList';
 import WatchedMovieList from './components/WatchedMovieList';
+import MovieDetail from './components/MovieDetail';
 import RatingStar from './components/RatingStar';
 import './index.css';
 
@@ -18,10 +19,15 @@ export default function App() {
  const [isLoading, setIsLoading] = useState(false);
  const [movies, setMovies] = useState([]);
  const [watched, setWatched] = useState([]);
+ const [selectedId, setSelectedId] = useState(null);
  const [query, setQuery] = useState('');
 
  const handleChangeQuery = async (newQuery) => {
   setQuery(newQuery);
+ };
+
+ const handleSelectId = (newId) => {
+  newId === selectedId ? setSelectedId(null) : setSelectedId(newId);
  };
 
  useEffect(() => {
@@ -68,10 +74,20 @@ export default function App() {
     <Box>
      {isLoading && <p className='loader'>...loading</p>}
      {error && <p className='error'>{error}</p>}
-     {!isLoading && !error && <MoviesList movies={movies} />}
+     {!isLoading && !error && (
+      <MoviesList movies={movies} onSelectMovie={handleSelectId} />
+     )}
     </Box>
     <Box>
-     <WatchedMovieList watched={watched} />
+     <>
+      {!selectedId && <WatchedMovieList watched={watched} />}
+      {selectedId && (
+       <MovieDetail
+        onClose={() => setSelectedId(null)}
+        selectedId={selectedId}
+       />
+      )}
+     </>
     </Box>
    </Main>
   </>
