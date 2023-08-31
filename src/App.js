@@ -14,16 +14,21 @@ const apiKey = '31c8b5ab';
 const apiUri = 'http://www.omdbapi.com';
 
 export default function App() {
+ const [isLoading, setIsLoading] = useState(false);
  const [movies, setMovies] = useState([]);
  const [watched, setWatched] = useState([]);
  const [query, setQuery] = useState('');
 
  const getMovies = async ({ search = 'inception' } = {}) => {
   try {
+   setIsLoading(true);
    const result = await fetch(`${apiUri}/?apikey=${apiKey}&s=${search}`);
    const data = await result.json();
    setMovies(data.Search);
-  } catch (err) {}
+  } catch (err) {
+  } finally {
+   setIsLoading(false);
+  }
  };
 
  const handleChangeQuery = async (newQuery) => {};
@@ -43,7 +48,8 @@ export default function App() {
    </Nav>
    <Main>
     <Box>
-     <MoviesList movies={movies} />
+     {isLoading && <p className='loader'>...loading</p>}
+     {!isLoading && <MoviesList movies={movies} />}
     </Box>
     <Box>
      <WatchedMovieList watched={watched} />
