@@ -8,11 +8,8 @@ import Box from './components/Box';
 import MoviesList from './components/MoviesList';
 import WatchedMovieList from './components/WatchedMovieList';
 import MovieDetail from './components/MovieDetail';
-import RatingStar from './components/RatingStar';
+import { apiUri } from './api';
 import './index.css';
-
-const apiKey = '31c8b5ab';
-const apiUri = 'http://www.omdbapi.com';
 
 export default function App() {
  const [error, setError] = useState('');
@@ -39,7 +36,7 @@ export default function App() {
    try {
     setError('');
     setIsLoading(true);
-    const result = await fetch(`${apiUri}/?apikey=${apiKey}&s=${search}`, {
+    const result = await fetch(`${apiUri}&s=${search}`, {
      signal: controller.signal,
     });
     if (!result.ok) {
