@@ -43,6 +43,7 @@ export default function App() {
   };
   const getMovies = async ({ search = 'interstellar' } = {}) => {
    try {
+    handleSelectId(null);
     setError('');
     setIsLoading(true);
     const result = await fetch(`${apiUri}&s=${search}`, {

@@ -47,6 +47,17 @@ const MovieDetail = ({ selectedId, onClose, onAddWatchedMovie, movies }) => {
   getMovieDetail();
  }, [selectedId]);
 
+ useEffect(() => {
+  const handleKeyPress = (e) => {
+   if (e.keyCode !== 27) return;
+   onClose();
+  };
+  window.addEventListener('keydown', handleKeyPress);
+  return () => {
+   window.removeEventListener('keydown', handleKeyPress);
+  };
+ }, [onClose]);
+
  return (
   <div className='details'>
    {isLoading && <p className='loader'>... loading</p>}
