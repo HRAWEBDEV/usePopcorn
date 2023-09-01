@@ -58,6 +58,7 @@ export default function App() {
     setError('');
     setMovies(data.Search);
    } catch (err) {
+    if (err.name === 'AbortError') return;
     setError(err.message);
    } finally {
     setIsLoading(false);
@@ -94,9 +95,11 @@ export default function App() {
       )}
       {selectedId && (
        <MovieDetail
+        key={selectedId}
         onClose={() => setSelectedId(null)}
         selectedId={selectedId}
         onAddWatchedMovie={handleAddWatchedMovie}
+        movies={watched}
        />
       )}
      </>

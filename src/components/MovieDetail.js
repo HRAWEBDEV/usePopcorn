@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react';
 import RatingStar from './RatingStar';
 import { apiUri } from '../api';
 
-const MovieDetail = ({ selectedId, onClose, onAddWatchedMovie }) => {
+const MovieDetail = ({ selectedId, onClose, onAddWatchedMovie, movies }) => {
+ const [userRating, setUserRating] = useState(0);
  const [isLoading, setIsLoading] = useState(false);
  const [movieDetail, setMovieDetail] = useState({});
+
+ const targetMovie = movies.find((movie) => movie.imdbId === selectedId);
+
  const {
   Title: title,
   Year: year,
@@ -25,7 +29,7 @@ const MovieDetail = ({ selectedId, onClose, onAddWatchedMovie }) => {
    year,
    poster,
    imdbRating: 0,
-   userRating: 0,
+   userRating,
    runtime: Number(runtime.split(' ').at(0)),
   };
   onAddWatchedMovie(newWatchedMovie);
@@ -67,10 +71,24 @@ const MovieDetail = ({ selectedId, onClose, onAddWatchedMovie }) => {
      </header>
      <section>
       <div className='rating'>
-       <RatingStar maxRating={10} size={24} color='yellow' />
-       <button className='btn-add' onClick={handleAdd}>
-        add to list
-       </button>
+       {targetMovie ? (
+        <p>this movie is already added</p>
+       ) : (
+        <>
+         <RatingStar
+          maxRating={10}
+          size={24}
+          value={userRating}
+          onChnage={setUserRating}
+          color='yellow'
+         />
+         {userRating > 0 && (
+          <button className='btn-add' onClick={handleAdd}>
+           add to list
+          </button>
+         )}
+        </>
+       )}
       </div>
       <p>
        <em>{plot}</em>
